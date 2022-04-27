@@ -25,6 +25,7 @@
  """
 
 
+from sys import dont_write_bytecode
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as m
@@ -50,12 +51,13 @@ def newAnalyzer():
     Retorna el analizador inicializado.
     """
     analyzer = {'players': None,
-                'dateIndex': None
-                }
+                'dateIndex': None}
+          
 
-    analyzer['players'] = lt.newList('SINGLE_LINKED', compareIds)
+    analyzer['players'] = lt.newList('ARRAY_LIST', compareIds)
     analyzer['index'] = om.newMap(omaptype='RBT',
                                       comparefunction=compareDates)
+    #analyzer['clubName'] = lt.newList('SINGLE_LINKED', compareClubNames""")
     return analyzer
 
 # Funciones para agregar informacion al catalogo
@@ -118,7 +120,7 @@ def newDataEntry(player):
     entry['offenseIndex'] = m.newMap(numelements=30,
                                      maptype='PROBING',
                                      comparefunction=compareOffenses)
-    entry['lstclubs'] = lt.newList('SINGLE_LINKED', compareDates)
+    entry['lstclubs'] = lt.newList('SINGLE_LINKED', compareDatesJoined)
     return entry
 
 
@@ -137,9 +139,12 @@ def newOffenseEntry(offensegrp, player):
 # Funciones de consulta
 def playersSize(analyzer):
     """
-    Número de crimenes
+    Número de jugadpres
     """
     return lt.size(analyzer['players'])
+
+def clubsSize(analyzer):
+    return lt.size(analyzer['clubName'])
 
 
 def indexHeight(analyzer):
@@ -169,6 +174,33 @@ def maxKey(analyzer):
     """
     return om.maxKey(analyzer['index'])
 
+def newPlayer(id, name, clubName, dateClubJoined, age, dob, shortName, overall,
+                nationality, valueEUR, wageEUR, releaseEUR, validUntil, position, clubPos,
+                tags, traits):
+    player = {'name': '', 'sofifa_id': '', 'club_name': '' , 'club_joined': '', 'age':'', 
+        'dob':'','short_name':'','overall':'','nationality_name':'','value_eur':'',
+        'wage_eur':'','release_clause_eur':'','club_contract_valid_until':'','player_position':'','club_position':'',
+        'player_tags':'','player_traits':''}
+
+    player['sofifa_id']= id
+    player['name']= name
+    player['club_name']= clubName
+    player['club_joined']= dateClubJoined
+    player['age'] = age
+    player['dob'] = dob
+    player['short_name'] = shortName
+    player['overall'] = overall
+    player['nationality_name'] = nationality
+    player['value_eur'] = valueEUR
+    player['wage_eur'] = wageEUR
+    player['release_clause_eur'] = releaseEUR
+    player['club_contract_valid_until'] = validUntil
+    player['player_position'] = position
+    player['club_position'] = clubPos
+    player['player_tags'] = tags
+    player['player_traits'] = traits
+    
+    return player
 
 def getPlayersByRange(analyzer, initialDate, finalDate):
     """
@@ -194,6 +226,46 @@ def getPlayersByRangeCode(analyzer, initialDate, offensecode):
             return m.size(me.getValue(numoffenses)['lstoffenses'])
     return 0
 
+def getPlayersByClubName(analyzer, nameOfClub):
+    
+    """
+    Retorna los 5 jugadores más recientemente vinculados al club
+    """
+
+    players = analyzer['players']
+    listSize = lt.size(players)
+    returnedList = lt.newList()
+    counter = 1
+
+    nombreClub = str(nameOfClub)
+    for counter in range(1, listSize):
+        ele1 = lt.getElement(players, counter)
+        #print('\nNombre del club: ' + ele1['club_name'])
+        #lt.addLast(returnedList, ele1)
+        
+        if str(ele1['club_name']) == nombreClub:
+            print('\nExitoso!!!!!!!!')
+            eleAdd = lt.getElement(players, counter)
+            lt.addLast(returnedList, eleAdd)
+        else:
+            print('\nNo se cumple el if')   
+       
+
+    #sa.sort(returnedList, compareDatesJoined)
+   
+    return returnedList
+
+def getLastFiveAdquisitions(listClub):
+
+    listSize = lt.size(listClub)
+    lastFivePlayers = lt.newList()
+    for i in range(listSize-4, listSize+1):
+        player = lt.getElement(listClub, i)
+        lt.addFirst(lastFivePlayers, player)
+    
+    return lastFivePlayers
+
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 def compareIds(id1, id2):
     """
@@ -207,14 +279,19 @@ def compareIds(id1, id2):
         return -1
 
 
+def compareDatesJoined(player1, player2):
+    return (int(str(player1['club_joined'][0:4])) < int(str(player2['club_joined'][0:4])))
+
 def compareDates(date1, date2):
-    """
-    Compara dos fechas
-    """
+    
     if (date1 == date2):
         return 0
-    elif (date1 > date2):
-        return 1
+    else:
+        return -1
+
+def compareClubNames(clubName, club):
+    if (clubName == club['club_name']):
+        return 0
     else:
         return -1
 

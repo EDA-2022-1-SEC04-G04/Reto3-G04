@@ -41,9 +41,35 @@ operación solicitada
 
 playersfile = 'FIFA//fifa-players-2022-utf8-small.csv'
 cont = None
+
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
+def newAnalyzer():
+    """
+    Se crea una instancia del controlador
+    """
+    analyzer = controller.init()
+    return analyzer
+
+analyzer = newAnalyzer()
+
+def printInfoplayer(playerList):
+    """
+    Imprime los mejores libros solicitados
+    """
+    size = lt.size(playerList)
+    if size:
+        print(' Esta es la información de los últimos 5 jugadores: ')
+        for player in lt.iterator(playerList):
+            print('Fecha de entrada: ' + player['club_joined'] + '\nNombre: ' + player['short_name'] + 
+            '\nEdad: ' + player['age'] + '\nFecha nacimiento: ' + player['dob'] + '\n' + '\nDesempeño: ' + player['overall']
+            + '\nNacionalidad: ' + player['nationality_name'] + '\nPrecio: EUR' + player['value_eur'] + '\nSalario: EUR' + player['wage_eur']
+            + '\nPrecio de terminación: EUR' + player['release_clause_eur'] + '\nFecha límite del contrato: ' + player['club_contract_valid_until']
+            + '\nPosición del jugador: ' + player['player_positions'] + '\nPosición el el club: ' + player['club_position'] + '\nTags: ' + player['player_tags']
+            + '\nCaracterísticas del jugador: ' + player['player_traits']) 
+    else:
+        print("ERROR")
 
 
 def printMenu():
@@ -52,7 +78,7 @@ def printMenu():
     print("Bienvenido")
     print("1- Inicializar Analizador")
     print("2- Cargar información de jugadores")
-    print("3- Consultar crimenes en un rango de fechas")
+    print("3- Consultar últimos 5 jugadores en unirse a un club")
     print("4- Consultar crimenes por codigo y fecha")
     print("0- Salir")
     print("*******************************************")
@@ -79,11 +105,11 @@ while True:
         print('Mayor Llave: ' + str(controller.maxKey(cont)))
 
     elif int(inputs[0]) == 3:
-        print("\nBuscando crimenes en un rango de fechas: ")
-        initialDate = input("Fecha Inicial (YYYY-MM-DD): ")
-        finalDate = input("Fecha Final (YYYY-MM-DD): ")
-        total = controller.getPlayersByRange(cont, initialDate, finalDate)
-        print("\nTotal de crimenes en el rango de fechas: " + str(total))
+        inputs2 = input("\nIntroduzca el nombre del club: ")
+        nameOfClub = str(input)
+        playerList = controller.getPlayersByClubName(cont, nameOfClub)
+        printInfoplayer(playerList)
+        
 
     elif int(inputs[0]) == 4:
         print("\nBuscando crimenes x grupo de ofensa en una fecha: ")

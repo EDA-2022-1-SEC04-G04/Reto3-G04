@@ -112,3 +112,11 @@ def getPlayersByRangeCode(analyzer, initialDate,
     initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
     return model.getPlayersByRangeCode(analyzer, initialDate.date(),
                                       offensecode)
+
+def getPlayersByClubName(analyzer, nameOfClub):
+
+    return model.getPlayersByClubName(analyzer, nameOfClub)
+
+def getLastFiveAdquisitions(listClub):
+
+    return model.getLastFiveAdquisitions(listClub)
