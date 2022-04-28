@@ -59,15 +59,22 @@ def printInfoplayer(playerList):
     Imprime los mejores libros solicitados
     """
     size = lt.size(playerList)
+    contador = 1
+
     if size:
-        print(' Esta es la información de los últimos 5 jugadores: ')
+        print('Esta es la información de los últimos 5 jugadores: ')
         for player in lt.iterator(playerList):
-            print('Fecha de entrada: ' + player['club_joined'] + '\nNombre: ' + player['short_name'] + 
-            '\nEdad: ' + player['age'] + '\nFecha nacimiento: ' + player['dob'] + '\n' + '\nDesempeño: ' + player['overall']
-            + '\nNacionalidad: ' + player['nationality_name'] + '\nPrecio: EUR' + player['value_eur'] + '\nSalario: EUR' + player['wage_eur']
-            + '\nPrecio de terminación: EUR' + player['release_clause_eur'] + '\nFecha límite del contrato: ' + player['club_contract_valid_until']
+            print('\n' + '\n---------------------------------------------' + '\nJugador #' + str(contador)
+            + '\nFecha de entrada: ' + player['club_joined'] + '\nNombre: ' + player['short_name'] + 
+            '\nEdad: ' + player['age'] + '\nFecha nacimiento: ' + player['dob']
+            + '\n======================='
+            + '\nDesempeño: ' + player['overall']
+            + '\nNacionalidad: ' + player['nationality_name'] + '\nPrecio: € ' + player['value_eur'] + '\nSalario: € ' + player['wage_eur']
+            + '\nPrecio de terminación: € ' + player['release_clause_eur'] + '\nFecha límite del contrato: ' + player['club_contract_valid_until']
             + '\nPosición del jugador: ' + player['player_positions'] + '\nPosición el el club: ' + player['club_position'] + '\nTags: ' + player['player_tags']
-            + '\nCaracterísticas del jugador: ' + player['player_traits']) 
+            + '\nCaracterísticas del jugador: ' + player['player_traits']  
+            + '\n---------------------------------------------')
+            contador = contador+1
     else:
         print("ERROR")
 
@@ -106,8 +113,7 @@ while True:
 
     elif int(inputs[0]) == 3:
         inputs2 = input("\nIntroduzca el nombre del club: ")
-        nameOfClub = str(input)
-        playerList = controller.getPlayersByClubName(cont, nameOfClub)
+        playerList = controller.getLastFiveAdquisitions(controller.getPlayersByClubName(cont, inputs2))
         printInfoplayer(playerList)
         
 

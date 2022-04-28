@@ -233,25 +233,21 @@ def getPlayersByClubName(analyzer, nameOfClub):
     """
 
     players = analyzer['players']
-    listSize = lt.size(players)
+    listSize = lt.size(players) 
     returnedList = lt.newList()
-    counter = 1
+    
 
-    nombreClub = str(nameOfClub)
     for counter in range(1, listSize):
         ele1 = lt.getElement(players, counter)
-        #print('\nNombre del club: ' + ele1['club_name'])
-        #lt.addLast(returnedList, ele1)
+        clubEle1 = ele1['club_name']
         
-        if str(ele1['club_name']) == nombreClub:
-            print('\nExitoso!!!!!!!!')
+        if clubEle1 == nameOfClub:
             eleAdd = lt.getElement(players, counter)
             lt.addLast(returnedList, eleAdd)
-        else:
-            print('\nNo se cumple el if')   
+         
        
 
-    #sa.sort(returnedList, compareDatesJoined)
+    sa.sort(returnedList, compareDatesJoined)
    
     return returnedList
 
