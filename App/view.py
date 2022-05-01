@@ -86,7 +86,7 @@ def printMenu():
     print("1- Inicializar Analizador")
     print("2- Cargar información de jugadores")
     print("3- Consultar últimos 5 jugadores en unirse a un club")
-    print("4- Consultar crimenes por codigo y fecha")
+    print("8- Consultar jugadores por rango salarial y tag")
     print("0- Salir")
     print("*******************************************")
 
@@ -117,14 +117,12 @@ while True:
         printInfoplayer(playerList)
         
 
-    elif int(inputs[0]) == 4:
-        print("\nBuscando crimenes x grupo de ofensa en una fecha: ")
-        initialDate = input("Fecha (YYYY-MM-DD): ")
-        offensecode = input("Ofensa: ")
-        numoffenses = controller.getPlayersByRangeCode(cont, initialDate,
-                                                      offensecode)
-        print("\nTotal de ofensas tipo: " + offensecode + " en esa fecha:  " +
-              str(numoffenses))
+    elif int(inputs[0]) == 8:
+        input1 = input("\nIntroduzca el salario mínimo: ")
+        input2 = input("\nIntroduzca el salario máximo: ")
+        input3 = input("\nIntroduzca el tag a buscar: ")
+        playerList1 = controller.getPlayersByWageRange(controller.getPlayersByTag(cont, input3), input2, input1)
+        printInfoplayer(playerList1)
 
     else:
         sys.exit(0)

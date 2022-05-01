@@ -120,3 +120,12 @@ def getPlayersByClubName(analyzer, nameOfClub):
 def getLastFiveAdquisitions(listClub):
 
     return model.getLastFiveAdquisitions(listClub)
+
+def getPlayersByWageRange(pList, wagePlayerU, wagePlayerD):
+
+    return model.getPlayersByWageRange(pList, wagePlayerU, wagePlayerD)
+
+
+def getPlayersByTag(analyzer, playerTag):
+
+    return model.getPlayersByTag(analyzer, playerTag)

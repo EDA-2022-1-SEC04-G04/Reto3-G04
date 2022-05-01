@@ -25,6 +25,7 @@
  """
 
 
+from ast import And
 from sys import dont_write_bytecode
 import config as cf
 from DISClib.ADT import list as lt
@@ -261,8 +262,83 @@ def getLastFiveAdquisitions(listClub):
     
     return lastFivePlayers
 
+def getPlayersByTag(analyzer, playerTag):
+
+    players = analyzer['players']
+    listSize = lt.size(players)
+    returnedList = lt.newList()
+
+    for cont in range(1, listSize+1):
+
+        ele1 = lt.getElement(players, cont)
+        
+        tagsEle1 = str(ele1['player_tags']).split(',')
+
+        for cont2 in range(0, len(tagsEle1)):
+            if playerTag == tagsEle1[cont2].lstrip():
+                lt.addLast(returnedList, ele1)
+    
+    return returnedList
+
+def getPlayersByWageRange(pList, wagePlayerU, wagePlayerD):
+    
+    
+    listSize = lt.size(pList) 
+    returnedList = lt.newList()
+
+    wageU = int(wagePlayerU)
+    wageD = int(wagePlayerD)
+
+
+    for cont in range(1, listSize+1):
+        
+        ele1 = lt.getElement(pList, cont)
+        wageEle1 = int(float(ele1['wage_eur']))
+       
+        if wageEle1 >= wageD and wageEle1 <= wageU:
+            #eleAdd = lt.getElement(pList, cont)
+            lt.addLast(returnedList, ele1)
+
+    #sa.sort(returnedList, compareWages)
+    return returnedList
+
+def getPlayersByWageRange2(analyzer, wagePlayerU, wagePlayerD):
+    
+    players = analyzer['players']
+    listSize = lt.size(players) 
+    returnedList = lt.newList()
+
+    wageU = int(wagePlayerU)
+    wageD = int(wagePlayerD)
+
+
+    for cont in range(1, listSize):
+        
+        ele1 = lt.getElement(players, cont)
+        wageEle1 = int(float(ele1['wage_eur']))
+        tagsEle1 = str(ele1['player_tags'])
+        listTags = tagsEle1.split(':')
+       
+        if wageEle1 >= wageD and wageEle1 <= wageU:
+            eleAdd = lt.getElement(players, cont)
+            lt.addLast(returnedList, eleAdd)
+
+    return returnedList
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
+def compareWages(player1, player2):
+
+    if (int(float(player1['wage_eur']))) == (int(float(player2['wage_eur']))):
+        return 1
+    elif (int(float(player1['wage_eur']))) > (int(float(player2['wage_eur']))):
+        return 1
+    else:
+        return -1
+
+
+    
+
 def compareIds(id1, id2):
     """
     Compara dos jugadores
