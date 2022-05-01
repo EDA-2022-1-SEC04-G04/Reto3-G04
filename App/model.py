@@ -25,6 +25,7 @@
  """
 
 
+from csv import list_dialects
 from sys import dont_write_bytecode
 import config as cf
 from DISClib.ADT import list as lt
@@ -176,11 +177,11 @@ def maxKey(analyzer):
 
 def newPlayer(id, name, clubName, dateClubJoined, age, dob, shortName, overall,
                 nationality, valueEUR, wageEUR, releaseEUR, validUntil, position, clubPos,
-                tags, traits):
+                tags, traits,potential):
     player = {'name': '', 'sofifa_id': '', 'club_name': '' , 'club_joined': '', 'age':'', 
         'dob':'','short_name':'','overall':'','nationality_name':'','value_eur':'',
-        'wage_eur':'','release_clause_eur':'','club_contract_valid_until':'','player_position':'','club_position':'',
-        'player_tags':'','player_traits':''}
+        'wage_eur':'','release_clause_eur':'','club_contract_valid_until':'','player_positions':'','club_position':'',
+        'player_tags':'','player_traits':'', 'potential':''}
 
     player['sofifa_id']= id
     player['name']= name
@@ -195,10 +196,11 @@ def newPlayer(id, name, clubName, dateClubJoined, age, dob, shortName, overall,
     player['wage_eur'] = wageEUR
     player['release_clause_eur'] = releaseEUR
     player['club_contract_valid_until'] = validUntil
-    player['player_position'] = position
+    player['player_positions'] = position
     player['club_position'] = clubPos
     player['player_tags'] = tags
     player['player_traits'] = traits
+    player['potential'] = potential
     
     return player
 
@@ -231,7 +233,6 @@ def getPlayersByClubName(analyzer, nameOfClub):
     """
     Retorna los 5 jugadores más recientemente vinculados al club
     """
-
     players = analyzer['players']
     listSize = lt.size(players) 
     returnedList = lt.newList()
@@ -261,6 +262,32 @@ def getLastFiveAdquisitions(listClub):
     
     return lastFivePlayers
 
+def getPlayerByPosition(analyzer, position):
+    player = analyzer['players']
+    listSize = lt.size(player) 
+    returnedList = lt.newList()
+    for counter in range(1, listSize):
+        ele1 = lt.getElement(player, counter)
+        ele1position = ele1['player_positions']
+        if position in ele1position:
+            eleAdd = lt.getElement(player, counter)
+            lt.addLast(returnedList, eleAdd)
+    return returnedList
+        
+def getPlayerRange(range1, range2, range3, lista):
+    listSize = lt.size(lista) 
+    returnedList = lt.newList()
+    for cont in range (listSize):
+        ele1 = lt.getElement(lista, cont)
+        overall = ele1['overall']
+        pottential = ele1['potential']
+        wage = ele1['wage_eur']
+        if (int(overall) > int(range1[0]) and int(overall) < int(range1[1])):
+            if (int(pottential) > int(range2[0]) and int(pottential) < int(range2[1])):
+                if (float(wage) > float(range3[0]) and float(wage) < float(range3[1])):
+                    lt.addLast(returnedList, ele1)
+    return returnedList
+    
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 def compareIds(id1, id2):

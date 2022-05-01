@@ -20,6 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+from turtle import position
 import config as cf
 import sys
 import controller
@@ -72,7 +73,7 @@ def printInfoplayer(playerList):
             + '\nNacionalidad: ' + player['nationality_name'] + '\nPrecio: € ' + player['value_eur'] + '\nSalario: € ' + player['wage_eur']
             + '\nPrecio de terminación: € ' + player['release_clause_eur'] + '\nFecha límite del contrato: ' + player['club_contract_valid_until']
             + '\nPosición del jugador: ' + player['player_positions'] + '\nPosición el el club: ' + player['club_position'] + '\nTags: ' + player['player_tags']
-            + '\nCaracterísticas del jugador: ' + player['player_traits']  
+            + '\nCaracterísticas del jugador: ' + player['player_traits'] + '\nPotencial: '+player['potential']  
             + '\n---------------------------------------------')
             contador = contador+1
     else:
@@ -86,7 +87,7 @@ def printMenu():
     print("1- Inicializar Analizador")
     print("2- Cargar información de jugadores")
     print("3- Consultar últimos 5 jugadores en unirse a un club")
-    print("4- Consultar crimenes por codigo y fecha")
+    print("4- Buscar por jugadores en porsición")
     print("0- Salir")
     print("*******************************************")
 
@@ -118,14 +119,17 @@ while True:
         
 
     elif int(inputs[0]) == 4:
-        print("\nBuscando crimenes x grupo de ofensa en una fecha: ")
-        initialDate = input("Fecha (YYYY-MM-DD): ")
-        offensecode = input("Ofensa: ")
-        numoffenses = controller.getPlayersByRangeCode(cont, initialDate,
-                                                      offensecode)
-        print("\nTotal de ofensas tipo: " + offensecode + " en esa fecha:  " +
-              str(numoffenses))
-
+        pos = input("\nIntroduzca posición deseada: ")
+        datazo1 = input("\nRango de desempeño global separado por un guión (-): ")
+        datazo2 = input("\nRango de potencial separado por un guión (-): ")
+        datazo3 = input("\nRango de salario separado por un guión (-): ")
+        overall = datazo1.split("-")
+        potential = datazo2.split("-")
+        wage = datazo3.split("-")
+        lista = controller.getPlayerRange(overall, potential, wage, controller.getPlayersPosicion(cont, pos))
+        printInfoplayer(lista)
+        
+        
     else:
         sys.exit(0)
 sys.exit(0)

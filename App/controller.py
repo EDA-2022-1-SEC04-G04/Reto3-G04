@@ -114,9 +114,16 @@ def getPlayersByRangeCode(analyzer, initialDate,
                                       offensecode)
 
 def getPlayersByClubName(analyzer, nameOfClub):
-
     return model.getPlayersByClubName(analyzer, nameOfClub)
 
 def getLastFiveAdquisitions(listClub):
 
     return model.getLastFiveAdquisitions(listClub)
+
+def getPlayersPosicion(analyzer, positions):
+    
+    return model.getPlayerByPosition(analyzer, positions)
+
+def getPlayerRange(range1, range2, range3, lista):
+    
+    return model.getPlayerRange(range1,range2,range3,lista)
