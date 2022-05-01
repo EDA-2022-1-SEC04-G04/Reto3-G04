@@ -87,6 +87,7 @@ def printMenu():
     print("2- Cargar información de jugadores")
     print("3- Consultar últimos 5 jugadores en unirse a un club")
     print("8- Consultar jugadores por rango salarial y tag")
+    print("9- Consultar histograma")
     print("0- Salir")
     print("*******************************************")
 
@@ -123,6 +124,11 @@ while True:
         input3 = input("\nIntroduzca el tag a buscar: ")
         playerList1 = controller.getPlayersByWageRange(controller.getPlayersByTag(cont, input3), input2, input1)
         printInfoplayer(playerList1)
+    elif int(inputs[0]) == 9:
+        input11 = input("\nSeleccione un atributo: \n1. Overall\n2. Potential\n3. value_eu\n4. wage_eur\n5. height_cm\n6. weight_cm\n7. release_clause_eur\n\nIntroduzca el numero de atributo: ")
+        input12 = input("\nIntroduzca cuantos jugadores por marca: ")
+        input13 = input("\nIntroduzca el número de segmentos: ")
+        controller.graphHistogramByParameter1(cont, input12, input13, input11)
 
     else:
         sys.exit(0)

@@ -325,6 +325,75 @@ def getPlayersByWageRange2(analyzer, wagePlayerU, wagePlayerD):
 
     return returnedList
 
+def graphHistogramByParameter1(analyzer, pPlayerPerMarks, pSegmentNumber, pAttribute):
+
+    players = analyzer['players']
+    listSize = lt.size(players)
+    menorNumero = 0
+    mayorNumero = 0
+
+    attStr = str(pAttribute)
+    nSegmentos = float(pSegmentNumber)
+
+    if attStr == "1":
+        atributo = 'overall'
+    elif attStr == "2":
+        atributo = 'potential'
+    elif attStr == "3": 
+        atributo = 'value_eur'
+    elif attStr == "4": 
+        atributo = 'wage_eur'
+    elif attStr == "5": 
+        atributo = 'age'
+    elif attStr == "6": 
+        atributo = 'height_cm'
+    elif attStr == "7": 
+        atributo = 'weight_kg'
+    elif attStr == "8": 
+        atributo = 'release_clause_eur'
+    
+
+    vAtributoI = float(lt.getElement(players,1)[atributo])
+    menorNumero = vAtributoI  
+    for cont in range(1, listSize+1):
+
+        ele1 = lt.getElement(players, cont)
+        atributoE1 = float(ele1[atributo])
+        
+        if atributoE1 < menorNumero:
+            menorNumero = atributoE1
+        elif atributoE1 > mayorNumero:
+            mayorNumero = atributoE1
+
+    difValores = mayorNumero - menorNumero
+    numSum = difValores/nSegmentos
+                          
+    print('\n|  bin  |' + ' count |' + ' lvl |' + ' mark       ')
+        	
+    for cont3 in range(0, int(nSegmentos)):
+
+        numeroMasPequenho = menorNumero + (numSum*cont3)
+        numeroMasGrande = menorNumero + (numSum +(numSum*cont3))  
+        contadorNivel = 0
+        for cont2 in range (1, listSize+1):
+
+            eleActual = lt.getElement(players, cont2)
+            vAtributoActual = float(eleActual[atributo])
+
+            if vAtributoActual > numeroMasPequenho and vAtributoActual <= numeroMasGrande:
+                contadorNivel = contadorNivel +1
+            stringA = "*"*int((contadorNivel/int(pPlayerPerMarks)))
+
+            if cont2 == listSize:
+                print('\n(' + str(numeroMasPequenho) + ', ' + str(numeroMasGrande) + ' ]' + ' | ' + str(contadorNivel) + ' | ' + stringA + ' | ' +
+                '\n______________________')    
+            
+            
+
+
+    return 0
+
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 def compareWages(player1, player2):

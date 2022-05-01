@@ -129,3 +129,7 @@ def getPlayersByWageRange(pList, wagePlayerU, wagePlayerD):
 def getPlayersByTag(analyzer, playerTag):
 
     return model.getPlayersByTag(analyzer, playerTag)
+
+def graphHistogramByParameter1(analyzer, pPlayerPerMarks, pSegmentNumber, pAttribute):
+    
+    return model.graphHistogramByParameter1 (analyzer, pPlayerPerMarks, pSegmentNumber, pAttribute)
