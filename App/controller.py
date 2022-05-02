@@ -148,3 +148,7 @@ def getPlayersByTag(analyzer, playerTag):
 def graphHistogramByParameter1(analyzer, pPlayerPerMarks, pSegmentNumber, pAttribute):
     
     return model.graphHistogramByParameter1 (analyzer, pPlayerPerMarks, pSegmentNumber, pAttribute)
+
+def retornarTresUyP(pLista):
+
+    return model.retornarTresUyP(pLista)

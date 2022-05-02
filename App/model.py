@@ -60,7 +60,6 @@ def newAnalyzer():
     analyzer['players'] = lt.newList('ARRAY_LIST', compareIds)
     analyzer['index'] = om.newMap(omaptype='RBT',
                                       comparefunction=compareDates)
-    #analyzer['clubName'] = lt.newList('SINGLE_LINKED', compareClubNames""")
     return analyzer
 
 # Funciones para agregar informacion al catalogo
@@ -238,7 +237,9 @@ def getPlayersByClubName(analyzer, nameOfClub):
     players = analyzer['players']
     listSize = lt.size(players) 
     returnedList = lt.newList()
-    
+    contadorGeneral1 = 0
+    nombreLiga = ""
+    categoriaLiga = ""
 
     for counter in range(1, listSize):
         ele1 = lt.getElement(players, counter)
@@ -247,8 +248,14 @@ def getPlayersByClubName(analyzer, nameOfClub):
         if clubEle1 == nameOfClub:
             eleAdd = lt.getElement(players, counter)
             lt.addLast(returnedList, eleAdd)
+            nombreLiga = eleAdd['league_name']
+            categoriaLiga = eleAdd['league_level']
+            contadorGeneral1 = contadorGeneral1 + 1
          
-       
+    print ('\nEl número total de adquisiciones del club es: ' + str(contadorGeneral1))
+    print ('\n\n -------=Detalles de Liga=-------')
+    print('\nNombre: ' + nombreLiga)
+    print ('\nCategoría: ' + '"' + categoriaLiga + '"')
 
     sa.sort(returnedList, compareDatesJoined)
    
@@ -256,21 +263,29 @@ def getPlayersByClubName(analyzer, nameOfClub):
 
 def getLastFiveAdquisitions(listClub):
 
+    returnedList = lt.newList()
     listSize = lt.size(listClub)
-    lastFivePlayers = lt.newList()
-    for i in range(listSize-4, listSize+1):
-        player = lt.getElement(listClub, i)
-        lt.addFirst(lastFivePlayers, player)
-    
-    return lastFivePlayers
+
+    if listSize < 5:
+        return listClub
+    else:
+        for cont in range (listSize+1, listSize-4):
+            eleActual = lt.getElement(listClub, cont)
+            lt.addLast(returnedList, eleActual)
+
+        return returnedList
 
 def getPlayerByPosition(analyzer, position):
     player = analyzer['players']
     listSize = lt.size(player) 
     returnedList = lt.newList()
-    for counter in range(1, listSize):
+    #sa.sort(sa.sort(sa.sort(player, compareOverall),comparePotential), compareWages)
+
+    for counter in range(1, listSize+1):
         ele1 = lt.getElement(player, counter)
+
         ele1position = ele1['player_positions']
+
         if position in ele1position:
             eleAdd = lt.getElement(player, counter)
             lt.addLast(returnedList, eleAdd)
@@ -279,22 +294,28 @@ def getPlayerByPosition(analyzer, position):
 def getPlayerRange(range1, range2, range3, lista):
     listSize = lt.size(lista) 
     returnedList = lt.newList()
-    for cont in range (listSize):
+    contadorGeneral = 0
+
+    for cont in range (1, listSize+1):
         ele1 = lt.getElement(lista, cont)
         overall = ele1['overall']
         pottential = ele1['potential']
         wage = ele1['wage_eur']
-        if (int(overall) > int(range1[0]) and int(overall) < int(range1[1])):
-            if (int(pottential) > int(range2[0]) and int(pottential) < int(range2[1])):
-                if (float(wage) > float(range3[0]) and float(wage) < float(range3[1])):
+        if (int(overall) >= int(range1[0]) and int(overall) <= int(range1[1])):
+            if (int(pottential) >= int(range2[0]) and int(pottential) <= int(range2[1])):
+                if (float(wage) >= float(range3[0]) and float(wage) <= float(range3[1])):
                     lt.addLast(returnedList, ele1)
+                    contadorGeneral = contadorGeneral + 1
+
+    #sa.sort(sa.sort(returnedList, compareAge), compareShortName)
+    print('\nCantidad de jugadores que cumplen con estas reglas: ' + str(contadorGeneral))                
     return returnedList
     
 def getPlayerByTraits (analyzer, trait):
     player = analyzer['players']
     listSize = lt.size(player) 
     returnedList = lt.newList()
-    for cont in range(1, listSize):
+    for cont in range(1, listSize+1):
         ele1 = lt.getElement(player, cont)
         ele1Trait = ele1['player_traits']
         if trait in ele1Trait:
@@ -308,12 +329,15 @@ def getPlayerByDob (rango, lista):
     returnedList  = lt.newList()
     fecha1 = dt.strptime(rango[0].strip(), '%Y-%m-%d')
     fecha2 = dt.strptime(rango[1].strip(), '%Y-%m-%d')
-    for cont in range (listSize):
+
+    for cont in range (1, listSize+1):
         ele1 = lt.getElement(lista, cont)
         dob = ele1['dob']
         fecha3 = dt.strptime(dob, '%Y-%m-%d')
         if (fecha3 > fecha1 and fecha3 < fecha2):
             lt.addLast(returnedList, ele1)
+
+    #sa.sort(returnedList, compareDob)
     return returnedList
         
 def getPlayersByTag(analyzer, playerTag):
@@ -354,6 +378,7 @@ def getPlayersByWageRange(pList, wagePlayerU, wagePlayerD):
             lt.addLast(returnedList, ele1)
 
     sa.sort(returnedList, compareWages)
+    print('\nLa cantidad de jugadores que cumplen con los criterios es: ' + str(lt.size(returnedList)))
     return returnedList
 
 def getPlayersByWageRange2(analyzer, wagePlayerU, wagePlayerD):
@@ -448,6 +473,23 @@ def graphHistogramByParameter1(analyzer, pPlayerPerMarks, pSegmentNumber, pAttri
     return 0
 
 
+def retornarTresUyP(pLista):
+
+
+    returnedList = lt.newList()
+    listSize = lt.size(pLista)
+    if listSize < 6:
+        return pLista
+    else:
+        for cont in range (1, 4):
+            eleActual = lt.getElement(pLista, cont)
+            lt.addLast(returnedList, eleActual)
+    
+        for cont2 in range (listSize-2, listSize+1):
+            eleActual = lt.getElement(pLista, cont2)
+            lt.addLast(returnedList, eleActual) 
+
+        return returnedList
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 def compareWages(player1, player2):
@@ -459,8 +501,41 @@ def compareWages(player1, player2):
     else:
         return -1
 
+def comparePotential(player1, player2):
 
+    if (int(float(player1['potential']))) == (int(float(player2['potential']))):
+        return 0
+    elif (int(float(player1['potential']))) > (int(float(player2['potential']))):
+        return 1
+    else:
+        return -1
+
+def compareAge(player1, player2):
+
+    if (int(float(player1['age']))) == (int(float(player2['age']))):
+        return 0
+    elif (int(float(player1['age']))) > (int(float(player2['age']))):
+        return 1
+    else:
+        return -1
+
+def compareShortName(player1, player2):
+
+    if player1['short_name'][0] == player2['age'][0]:
+        return 0
+    elif player1['age'][0] > player2['age'][0]:
+        return 1
+    else:
+        return -1
+def compareOverall(player1, player2):
     
+    if (int(float(player1['overall']))) == (int(float(player2['overall']))):
+        return 0
+    elif (int(float(player1['overall']))) > (int(float(player2['overall']))):
+        return 1
+    
+    else:
+        return -1    
 
 def compareIds(id1, id2):
     """
@@ -475,8 +550,19 @@ def compareIds(id1, id2):
 
 
 def compareDatesJoined(player1, player2):
-    return (int(str(player1['club_joined'][0:4])) < int(str(player2['club_joined'][0:4])))
+    return (int(str(player1['club_joined'][0:4])) > int(str(player2['club_joined'][0:4])))
 
+def compareDob(player1, player2):
+
+    dobPlayer1 = dt.strptime(player1['dob'], '%Y-%m-%d')
+    dobPlayer2 = dt.strptime(player2['dob'], '%Y-%m-%d')
+    
+    if dobPlayer1 == dobPlayer2:
+        return 0
+    elif dobPlayer1 > dobPlayer2:
+        return 1
+    else:
+        return -1
 def compareDates(date1, date2):
     
     if (date1 == date2):
