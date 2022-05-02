@@ -26,6 +26,8 @@
 
 
 from csv import list_dialects
+from ast import And
+from posixpath import split
 from sys import dont_write_bytecode
 import config as cf
 from DISClib.ADT import list as lt
@@ -33,7 +35,7 @@ from DISClib.ADT import map as m
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
-import datetime
+from datetime import datetime as dt
 assert cf
 
 """
@@ -288,8 +290,178 @@ def getPlayerRange(range1, range2, range3, lista):
                     lt.addLast(returnedList, ele1)
     return returnedList
     
+def getPlayerByTraits (analyzer, trait):
+    player = analyzer['players']
+    listSize = lt.size(player) 
+    returnedList = lt.newList()
+    for cont in range(1, listSize):
+        ele1 = lt.getElement(player, cont)
+        ele1Trait = ele1['player_traits']
+        if trait in ele1Trait:
+            eleAdd = lt.getElement(player, cont)
+            lt.addLast(returnedList, eleAdd)
+    return returnedList
+    
+def getPlayerByDob (rango, lista):
+    
+    listSize = lt.size(lista)
+    returnedList  = lt.newList()
+    fecha1 = dt.strptime(rango[0].strip(), '%Y-%m-%d')
+    fecha2 = dt.strptime(rango[1].strip(), '%Y-%m-%d')
+    for cont in range (listSize):
+        ele1 = lt.getElement(lista, cont)
+        dob = ele1['dob']
+        fecha3 = dt.strptime(dob, '%Y-%m-%d')
+        if (fecha3 > fecha1 and fecha3 < fecha2):
+            lt.addLast(returnedList, ele1)
+    return returnedList
+        
+def getPlayersByTag(analyzer, playerTag):
+
+    players = analyzer['players']
+    listSize = lt.size(players)
+    returnedList = lt.newList()
+
+    for cont in range(1, listSize+1):
+
+        ele1 = lt.getElement(players, cont)
+        
+        tagsEle1 = str(ele1['player_tags']).split(',')
+
+        for cont2 in range(0, len(tagsEle1)):
+            if playerTag == tagsEle1[cont2].lstrip():
+                lt.addLast(returnedList, ele1)
+    
+    return returnedList
+
+def getPlayersByWageRange(pList, wagePlayerU, wagePlayerD):
+    
+    
+    listSize = lt.size(pList) 
+    returnedList = lt.newList()
+
+    wageU = int(wagePlayerU)
+    wageD = int(wagePlayerD)
+
+
+    for cont in range(1, listSize+1):
+        
+        ele1 = lt.getElement(pList, cont)
+        wageEle1 = int(float(ele1['wage_eur']))
+       
+        if wageEle1 >= wageD and wageEle1 <= wageU:
+            #eleAdd = lt.getElement(pList, cont)
+            lt.addLast(returnedList, ele1)
+
+    sa.sort(returnedList, compareWages)
+    return returnedList
+
+def getPlayersByWageRange2(analyzer, wagePlayerU, wagePlayerD):
+    
+    players = analyzer['players']
+    listSize = lt.size(players) 
+    returnedList = lt.newList()
+
+    wageU = int(wagePlayerU)
+    wageD = int(wagePlayerD)
+
+
+    for cont in range(1, listSize):
+        
+        ele1 = lt.getElement(players, cont)
+        wageEle1 = int(float(ele1['wage_eur']))
+        tagsEle1 = str(ele1['player_tags'])
+        listTags = tagsEle1.split(':')
+       
+        if wageEle1 >= wageD and wageEle1 <= wageU:
+            eleAdd = lt.getElement(players, cont)
+            lt.addLast(returnedList, eleAdd)
+
+    return returnedList
+
+def graphHistogramByParameter1(analyzer, pPlayerPerMarks, pSegmentNumber, pAttribute):
+
+    players = analyzer['players']
+    listSize = lt.size(players)
+    menorNumero = 0
+    mayorNumero = 0
+
+    attStr = str(pAttribute)
+    nSegmentos = float(pSegmentNumber)
+
+    if attStr == "1":
+        atributo = 'overall'
+    elif attStr == "2":
+        atributo = 'potential'
+    elif attStr == "3": 
+        atributo = 'value_eur'
+    elif attStr == "4": 
+        atributo = 'wage_eur'
+    elif attStr == "5": 
+        atributo = 'age'
+    elif attStr == "6": 
+        atributo = 'height_cm'
+    elif attStr == "7": 
+        atributo = 'weight_kg'
+    elif attStr == "8": 
+        atributo = 'release_clause_eur'
+    
+
+    vAtributoI = float(lt.getElement(players,1)[atributo])
+    menorNumero = vAtributoI  
+    for cont in range(1, listSize+1):
+
+        ele1 = lt.getElement(players, cont)
+        atributoE1 = float(ele1[atributo])
+        
+        if atributoE1 < menorNumero:
+            menorNumero = atributoE1
+        elif atributoE1 > mayorNumero:
+            mayorNumero = atributoE1
+
+    difValores = mayorNumero - menorNumero
+    numSum = difValores/nSegmentos
+                          
+    print('\n|  bin  |' + ' count |' + ' lvl |' + ' mark       ')
+        	
+    for cont3 in range(0, int(nSegmentos)):
+
+        numeroMasPequenho = menorNumero + (numSum*cont3)
+        numeroMasGrande = menorNumero + (numSum +(numSum*cont3))  
+        contadorNivel = 0
+        for cont2 in range (1, listSize+1):
+
+            eleActual = lt.getElement(players, cont2)
+            vAtributoActual = float(eleActual[atributo])
+
+            if vAtributoActual > numeroMasPequenho and vAtributoActual <= numeroMasGrande:
+                contadorNivel = contadorNivel +1
+            stringA = "*"*int((contadorNivel/int(pPlayerPerMarks)))
+
+            if cont2 == listSize:
+                print('\n(' + str(numeroMasPequenho) + ', ' + str(numeroMasGrande) + ' ]' + ' | ' + str(contadorNivel) + ' | ' + stringA + ' | ' +
+                '\n______________________')    
+            
+            
+
+
+    return 0
+
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
+def compareWages(player1, player2):
+
+    if (int(float(player1['wage_eur']))) == (int(float(player2['wage_eur']))):
+        return 0
+    elif (int(float(player1['wage_eur']))) > (int(float(player2['wage_eur']))):
+        return 1
+    else:
+        return -1
+
+
+    
+
 def compareIds(id1, id2):
     """
     Compara dos jugadores

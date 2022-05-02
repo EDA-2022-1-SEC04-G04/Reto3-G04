@@ -1,0 +1,8 @@
+1. Overall
+2. Potential
+3. value_eur
+4. wage_eur
+5. height_cm
+6. weight_cm
+7. release_clause_eur
+

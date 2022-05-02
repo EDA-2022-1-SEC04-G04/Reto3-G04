@@ -114,6 +114,7 @@ def getPlayersByRangeCode(analyzer, initialDate,
                                       offensecode)
 
 def getPlayersByClubName(analyzer, nameOfClub):
+    
     return model.getPlayersByClubName(analyzer, nameOfClub)
 
 def getLastFiveAdquisitions(listClub):
@@ -127,3 +128,23 @@ def getPlayersPosicion(analyzer, positions):
 def getPlayerRange(range1, range2, range3, lista):
     
     return model.getPlayerRange(range1,range2,range3,lista)
+
+def getPlayerByTraits(analyzer, trait):
+    
+    return model.getPlayerByTraits(analyzer, trait)
+
+def getPlayerByDob (rango, lista):
+    
+    return model.getPlayerByDob(rango,  lista)
+
+def getPlayersByWageRange(pList, wagePlayerU, wagePlayerD):
+
+    return model.getPlayersByWageRange(pList, wagePlayerU, wagePlayerD)
+
+def getPlayersByTag(analyzer, playerTag):
+
+    return model.getPlayersByTag(analyzer, playerTag)
+
+def graphHistogramByParameter1(analyzer, pPlayerPerMarks, pSegmentNumber, pAttribute):
+    
+    return model.graphHistogramByParameter1 (analyzer, pPlayerPerMarks, pSegmentNumber, pAttribute)

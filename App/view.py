@@ -73,7 +73,7 @@ def printInfoplayer(playerList):
             + '\nNacionalidad: ' + player['nationality_name'] + '\nPrecio: € ' + player['value_eur'] + '\nSalario: € ' + player['wage_eur']
             + '\nPrecio de terminación: € ' + player['release_clause_eur'] + '\nFecha límite del contrato: ' + player['club_contract_valid_until']
             + '\nPosición del jugador: ' + player['player_positions'] + '\nPosición el el club: ' + player['club_position'] + '\nTags: ' + player['player_tags']
-            + '\nCaracterísticas del jugador: ' + player['player_traits'] + '\nPotencial: '+player['potential']  
+            + '\nComentarios del jugador: ' + player['player_traits'] + '\nPotencial: '+player['potential']  
             + '\n---------------------------------------------')
             contador = contador+1
     else:
@@ -87,7 +87,10 @@ def printMenu():
     print("1- Inicializar Analizador")
     print("2- Cargar información de jugadores")
     print("3- Consultar últimos 5 jugadores en unirse a un club")
-    print("4- Buscar por jugadores en porsición")
+    print("4- Buscar por jugadores en posición")
+    print("5- Buscar por jugadores por etiqueta")
+    print("6- Consultar jugadores por rango salarial y tag")
+    print("7- Consultar histograma")
     print("0- Salir")
     print("*******************************************")
 
@@ -116,7 +119,6 @@ while True:
         inputs2 = input("\nIntroduzca el nombre del club: ")
         playerList = controller.getLastFiveAdquisitions(controller.getPlayersByClubName(cont, inputs2))
         printInfoplayer(playerList)
-        
 
     elif int(inputs[0]) == 4:
         pos = input("\nIntroduzca posición deseada: ")
@@ -128,8 +130,27 @@ while True:
         wage = datazo3.split("-")
         lista = controller.getPlayerRange(overall, potential, wage, controller.getPlayersPosicion(cont, pos))
         printInfoplayer(lista)
+    
+    elif int(inputs[0]) == 5:
+        dato1 = input("\nBuscar jugador por una característica: ")
+        dato2 = input("\nEntre la fecha (separada por 'and'): ")
+        dob = dato2.split("and")
+        playerList = controller.getPlayerByDob(dob, controller.getPlayerByTraits(cont, dato1))
+        printInfoplayer(playerList)
         
+    elif int(inputs[0]) == 6:
+        input1 = input("\nIntroduzca el salario mínimo: ")
+        input2 = input("\nIntroduzca el salario máximo: ")
+        input3 = input("\nIntroduzca el tag a buscar: ")
+        playerList1 = controller.getPlayersByWageRange(controller.getPlayersByTag(cont, input3), input2, input1)
+        printInfoplayer(playerList1)
         
+    elif int(inputs[0]) == 7:
+        input11 = input("\nSeleccione un atributo: \n1. Overall\n2. Potential\n3. value_eu\n4. wage_eur\n5. height_cm\n6. weight_cm\n7. release_clause_eur\n\nIntroduzca el numero de atributo: ")
+        input12 = input("\nIntroduzca cuantos jugadores por marca: ")
+        input13 = input("\nIntroduzca el número de segmentos: ")
+        controller.graphHistogramByParameter1(cont, input12, input13, input11)
+
     else:
         sys.exit(0)
 sys.exit(0)
