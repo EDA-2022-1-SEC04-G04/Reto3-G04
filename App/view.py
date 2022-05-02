@@ -40,7 +40,7 @@ operación solicitada
 # ___________________________________________________
 
 
-playersfile = 'FIFA//fifa-players-2022-utf8-small.csv'
+playersfile = 'FIFA//fifa-players-2022-utf8-large.csv'
 cont = None
 
 # ___________________________________________________
@@ -63,7 +63,7 @@ def printInfoplayer(playerList):
     contador = 1
 
     if size:
-        print('Esta es la información de los últimos 5 jugadores: ')
+        print('\nEsta es la información de los jugadores: ')
         for player in lt.iterator(playerList):
             print('\n' + '\n---------------------------------------------' + '\nJugador #' + str(contador)
             + '\nFecha de entrada: ' + player['club_joined'] + '\nNombre: ' + player['short_name'] + 
@@ -86,11 +86,11 @@ def printMenu():
     print("Bienvenido")
     print("1- Inicializar Analizador")
     print("2- Cargar información de jugadores")
-    print("3- Consultar últimos 5 jugadores en unirse a un club")
-    print("4- Buscar por jugadores en posición")
-    print("5- Buscar por jugadores por etiqueta")
-    print("6- Consultar jugadores por rango salarial y tag")
-    print("7- Consultar histograma")
+    print("3- Consultar últimos 5 jugadores en unirse a un club (REQ 1)" )
+    print("4- Buscar por jugadores en posición y rango (REQ 2)")
+    print("5- Buscar por jugadores por etiqueta y rango (REQ 4)")
+    print("6- Consultar jugadores por rango salarial y tag (REQ 3)")
+    print("7- Consultar histograma (REQ 5)")
     print("0- Salir")
     print("*******************************************")
 
@@ -129,21 +129,24 @@ while True:
         potential = datazo2.split("-")
         wage = datazo3.split("-")
         lista = controller.getPlayerRange(overall, potential, wage, controller.getPlayersPosicion(cont, pos))
-        printInfoplayer(lista)
+        lista2 = controller.retornarTresUyP(lista)
+        printInfoplayer(lista2)
     
     elif int(inputs[0]) == 5:
         dato1 = input("\nBuscar jugador por una característica: ")
         dato2 = input("\nEntre la fecha (separada por 'and'): ")
         dob = dato2.split("and")
         playerList = controller.getPlayerByDob(dob, controller.getPlayerByTraits(cont, dato1))
-        printInfoplayer(playerList)
+        playerList12 = controller.retornarTresUyP(playerList)
+        printInfoplayer(playerList12)
         
     elif int(inputs[0]) == 6:
         input1 = input("\nIntroduzca el salario mínimo: ")
         input2 = input("\nIntroduzca el salario máximo: ")
         input3 = input("\nIntroduzca el tag a buscar: ")
         playerList1 = controller.getPlayersByWageRange(controller.getPlayersByTag(cont, input3), input2, input1)
-        printInfoplayer(playerList1)
+        playerList2 = controller.retornarTresUyP(playerList1)
+        printInfoplayer(playerList2)
         
     elif int(inputs[0]) == 7:
         input11 = input("\nSeleccione un atributo: \n1. Overall\n2. Potential\n3. value_eu\n4. wage_eur\n5. height_cm\n6. weight_cm\n7. release_clause_eur\n\nIntroduzca el numero de atributo: ")
